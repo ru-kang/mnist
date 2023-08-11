@@ -1,7 +1,7 @@
 # 1.匯入 Keras 及相關模組
 import numpy as np  
 import pandas as pd  
-from keras.utils import np_utils  
+from tensorflow.python.keras.utils import np_utils
 # 用來後續將 label 標籤轉為 one-hot-encoding  
 np.random.seed(10)  
 
