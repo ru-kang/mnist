@@ -23,6 +23,27 @@ def plot_image(image):
     plt.imshow(image, cmap='binary') # cmap='binary' 參數設定以黑白灰階顯示.  
     plt.show()
 
+# 加入my_traindata
+import os
+import cv2
+my_image = [] 
+my_label = []  
+# 遍历自定义图像文件夹中的每个文件
+files = os.listdir("./my_traindata")
+for filename in files:
+    # 读取图像并将其转换为灰度图像
+    img = cv2.imread(os.path.join("./my_traindata", filename), cv2.IMREAD_GRAYSCALE)
+    img = cv2.resize(img, (28, 28))  # 调整图像大小为28x28像素
+    my_image.append(img)  # 将图像加入列表
+    label = int(filename.split('.')[0])  # 假设文件名是类别标签，例如 '0.png'
+    my_label.append(label)  # 将对应标签加入列表
+my_images = np.array(my_image)
+my_labels = np.array(my_label)
+merged_images = np.concatenate((x_train_image, my_images), axis=0)
+merged_labels = np.concatenate((y_train_label, my_labels), axis=0)
+print('x_test_image = ',merged_images.shape)
+print('y_test_label =', merged_labels.shape)
+
 # 1.建立 plot_images_labels_predict() 函數
 # 為了後續能很方便查看數字圖形, 真實的數字與預測結果
 def plot_images_labels_predict(images, labels, prediction, idx, num=10):  
@@ -52,7 +73,7 @@ def plot_images_labels_predict(images, labels, prediction, idx, num=10):
 # label 也有6萬個
 # 所以要把二維的圖片矩陣先轉換成一維
 # 這裡的784是因為 28*28
-x_Train=x_train_image.reshape(60000,784).astype('float32')
+x_Train=merged_images.reshape(merged_images.shape[0],784).astype('float32')
 x_Test=x_test_image.reshape(10000,784).astype('float32')
 
 
@@ -61,7 +82,7 @@ x_Train_normalize=x_Train/255
 x_Test_normalize=x_Test/255
 
 # 標註資料--------------------------------------
-y_TrainOneHot=np_utils.to_categorical(y_train_label)
+y_TrainOneHot=np_utils.to_categorical(merged_labels)
 y_TestOneHot=np_utils.to_categorical(y_test_label)
 
 from keras.models import Sequential
