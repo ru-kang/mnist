@@ -124,11 +124,15 @@ def show_train_history(train_history,train,validation):
   plt.legend(['train','validation'],loc='upper left')
   plt.show()
 
-show_train_history(train_history,'accuracy','val_accuracy')
-show_train_history(train_history,'loss','val_loss')
+# show_train_history(train_history,'accuracy','val_accuracy')
+# show_train_history(train_history,'loss','val_loss')
 
 # 測試集評估
 scores=model.evaluate(x_Test_normalize,y_TestOneHot)
 print()
 print('accuracy',scores[1])
+
+# 保存模型
+model.save('mnist_model.keras')
+print("Model saved successfully.")
 
